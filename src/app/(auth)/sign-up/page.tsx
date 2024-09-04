@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthCredentialsValidator, TAuthCredentialsValidator } from "@/lib/validators/account-credentials-validator";
 import { trpc } from "@/trpc/client";
+import { toast } from "sonner";
+import { ZodError } from "zod";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
 
@@ -22,17 +25,41 @@ export default function SignUpPage() {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const { data } = trpc.anyApiRoute.useQuery();
-  console.log(data);
-  
+
+  const router = useRouter();
+
+
+  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
+    onError: (error) => {
+      if (error.data?.code === "CONFLICT") {
+        toast.error("This email is already in use, Sign in instead?");
+
+        return;
+      }
+
+      if (error instanceof ZodError) {
+        toast.error(error.issues[0].message);
+
+        return;
+      }
+
+      toast.error("Something went wrong, try again later");
+    },
+
+    onSuccess: ({sentToEmail}) => {
+      toast.success(`Verification email sent to ${sentToEmail}`);
+      router.push("/verify-email?to=" + sentToEmail);
+
+    }
+  });
 
   function onSubmit({email, password}: TAuthCredentialsValidator) {
-    // Send email and password to backend
+    mutate({ email, password });
   }
   return (
     <>
       <div className="container relative pt-20 flex flex-col justify-center items-center lg:px-0">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sw:w-[350px]">
+        <div className="mx-auto flex w-1/3 flex-col justify-center space-y-6 sw:w-[350px]">
           <div className="flex flex-col space-y-2 items-center text-center">
             <Icons.logo className="h-20 w-20" />
             <h1 className="text-2xl font-bold">Register an Account</h1>
@@ -63,6 +90,7 @@ export default function SignUpPage() {
                     type="email"
                     placeholder="you@example.com"
                   />
+                  {errors?.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                 </div>
                 <div className="grid gap-1 py-2">
                   <Label htmlFor="password">Password</Label>
@@ -75,6 +103,7 @@ export default function SignUpPage() {
                     type="password"
                     placeholder="Your password"
                   />
+                  {errors?.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
                 </div>
                 <Button>Sign Up</Button>
               </div>

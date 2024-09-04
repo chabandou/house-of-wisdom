@@ -1,4 +1,5 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import ProductReel from "@/components/ProductReel";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowDownToLine, CheckCircle, HandHeart } from "lucide-react";
 import Image from "next/image";
@@ -45,7 +46,13 @@ export default function Home() {
           </div>
         </div>
 
-        {/* TODO: list products */}
+        <ProductReel
+          query={{ sort: "desc", limit: 4 }}
+          title="New Arrivals"
+          subtitle="These are the latest releases"
+          href="/products"
+        />
+        
       </MaxWidthWrapper>
       <section className="border-t border-gray-200 bg-gray-50">
         <MaxWidthWrapper className="py-20">
@@ -61,8 +68,12 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="mt-6 md:mt-0 md:ml-4 lg:mt-6 lg:ml-0">
-                    <h3 className="text-base font-medium text-gray-900">{perk.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{perk.description}</p>
+                  <h3 className="text-base font-medium text-gray-900">
+                    {perk.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {perk.description}
+                  </p>
                 </div>
               </div>
             ))}

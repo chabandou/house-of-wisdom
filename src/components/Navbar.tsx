@@ -4,9 +4,15 @@ import { Icons } from "./Icons";
 import NavItems from "./NavItems";
 import { buttonVariants } from "./ui/button";
 import Cart from "./Cart";
+import { getServerSideUser } from "@/lib/payload-utils";
+import { cookies } from "next/headers";
+import UserAccountNav from "./UserAccountNav";
 
-export default function Navbar() {
-  const user = null;
+export default async function Navbar() {
+  const nextCookies = cookies();
+  const { user } = await getServerSideUser(nextCookies);
+  
+
   return (
     <div className="bg-white sticky top-0 inset-x-0 z-50 h-16">
       <header className="relative bg-white">
@@ -26,7 +32,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:gap-x-6">
                   {user ? null : (
                     <Link
-                      href="/login"
+                      href="/sign-in"
                       className={buttonVariants({ variant: "ghost" })}
                     >
                       Log in <span aria-hidden="true"> &rarr;</span>
@@ -36,9 +42,9 @@ export default function Navbar() {
                     <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
                   )}
 
-                  {user ? null : (
+                  {user ? <UserAccountNav user={user} /> : (
                     <Link
-                      href="/signup"
+                      href="/sign-up"
                       className={buttonVariants({ variant: "ghost" })}
                     >
                       Sign up
