@@ -3,13 +3,13 @@ import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { slateEditor } from "@payloadcms/richtext-slate";
 import path from "path";
 import { buildConfig } from "payload/config";
-import { Users } from "./collections/Users";
 
 import dotenv from "dotenv";
 import { Products } from "./collections/Products/Products";
 import { Media } from "./collections/Media";
 import { ProductFile } from "./collections/ProductFile";
 import { Orders } from "./collections/Orders";
+import { Users } from "./collections/Users";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
