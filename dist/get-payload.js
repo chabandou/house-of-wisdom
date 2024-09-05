@@ -55,7 +55,7 @@ var dotenv_1 = __importDefault(require("dotenv"));
 var path_1 = __importDefault(require("path"));
 var payload_1 = __importDefault(require("payload"));
 var nodemailer_1 = __importDefault(require("nodemailer"));
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, "../.env") });
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, "../.env.local") });
 var transporter = nodemailer_1.default.createTransport({
     host: "smtp.resend.com",
     port: 465,

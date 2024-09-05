@@ -11,7 +11,7 @@ import { ProductFile } from "./collections/ProductFile";
 import { Orders } from "./collections/Orders";
 import { Users } from "./collections/Users";
 
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+dotenv.config({ path: path.resolve(__dirname, "../.env.local") });
 
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || "",
